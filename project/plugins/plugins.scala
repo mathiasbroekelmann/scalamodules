@@ -8,6 +8,7 @@ class Plugins(info: ProjectInfo) extends PluginDefinition(info) {
 
   object Repositories {
     lazy val aquteRepo = "aQute Maven Repository" at "http://www.aqute.biz/repo"
+    lazy val sbtIdeaRepo = "sbt-idea-repo" at "http://mpeltonen.github.com/maven/"
   }
 
   // ===================================================================================================================
@@ -22,4 +23,6 @@ class Plugins(info: ProjectInfo) extends PluginDefinition(info) {
   // ===================================================================================================================
 
   lazy val bnd4sbt = "com.weiglewilczek.bnd4sbt" % "bnd4sbt" % "1.0.0"
+
+  lazy val sbtIdea = "com.github.mpeltonen" % "sbt-idea-plugin" % "0.3.0"
 }

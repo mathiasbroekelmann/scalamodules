@@ -53,6 +53,16 @@ class ServiceSpec extends Specification with Mockito {
       someApple must beSome[Apple]
       there was one(context).head(any[By[Apple]])
     }
+
+
+    "collects None if the service is not available in the service context" in {
+      context.head(By.byType[Apple]) returns None
+
+      val someApple = apple(context)
+
+      someApple must beNone
+      there was one(context).head(any[By[Apple]])
+    }
   }
 }
 

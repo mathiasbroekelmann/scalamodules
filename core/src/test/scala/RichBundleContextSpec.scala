@@ -119,4 +119,18 @@ class RichBundleContextSpec extends Specification with Mockito {
       servicesWatcher mustNotBe null
     }
   }
+
+  "Calling RichBundleContext.register" should {
+    val context = mock[BundleContext]
+
+    "throw exception when null is passed as service definition" in {
+      context.register(null) must throwA[IllegalArgumentException]
+    }
+
+    "register a simple service definition without any dependencies" in {
+      val apple = Service.service(new Apple {})
+      val registration = context.register(apple)
+      registration must notBeNull
+    }
+  }
 }

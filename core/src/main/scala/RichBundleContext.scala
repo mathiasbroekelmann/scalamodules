@@ -73,6 +73,14 @@ private[scalamodules] class RichBundleContext(context: BundleContext) {
   }
 
   /**
+   * registers a service. It keeps track of the service dependencies to make the service available as soon as all dependencies where available
+   */
+  def register[A<:AnyRef](service: ServiceDefinition[A]): ServiceRegistration = {
+    require(service != null, "The service definition must not be null")
+    null
+  }
+
+  /**
    * Starting point for finding a service with the given servivce interface.
    * @param interface The service interface for which a ServiceFinder is to be created; must not be null!
    * @return A ServiceFinder for the given service interface

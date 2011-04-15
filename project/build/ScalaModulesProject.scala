@@ -14,7 +14,7 @@ object ScalaModulesProject {
 
 import ScalaModulesProject._
 
-class ScalaModulesProject(info: ProjectInfo) extends ParentProject(info) with UnpublishedProject with IdeaProject {
+class ScalaModulesProject(info: ProjectInfo) extends ParentProject(info) with UnpublishedProject {
 
   // ===================================================================================================================
   // Dependencies
@@ -69,7 +69,7 @@ class ScalaModulesProject(info: ProjectInfo) extends ParentProject(info) with Un
 
   lazy val coreProject = project("core", "scalamodules-core", new CoreProject(_))
 
-  class CoreProject(info: ProjectInfo) extends DefaultProject(info) with BNDPlugin with IdeaProject {
+  class CoreProject(info: ProjectInfo) extends DefaultProject(info) with BNDPlugin {
     import Dependencies._
 
     override def libraryDependencies = Set(slf4s, osgiCore, osgiCompendium, specs, mockito, slf4jSimple)
@@ -94,7 +94,7 @@ class ScalaModulesProject(info: ProjectInfo) extends ParentProject(info) with Un
 
   lazy val coreITProject = project("core-it", "scalamodules-core-it", new CoreITProject(_), coreProject)
 
-  class CoreITProject(info: ProjectInfo) extends DefaultProject(info) with UnpublishedProject with IdeaProject {
+  class CoreITProject(info: ProjectInfo) extends DefaultProject(info) with UnpublishedProject {
     import Dependencies._
 
     System.setProperty("scalaModules.version", projectVersion.value.toString)

@@ -1,6 +1,6 @@
 package com.weiglewilczek.scalamodules
 
-import org.osgi.framework.{Filter => OsgiFilter}
+import org.osgi.framework.{ServiceRegistration, BundleContext, Filter => OsgiFilter}
 
 /**
  * Resolves a service from some context.
@@ -79,4 +79,69 @@ object Service {
       def apply(context: ServiceContext) = Some(someService)
     }
   }
+}
+
+private[scalamodules] case class OsgiExportDefinition[A <: AnyRef](context: BundleContext,
+                                                                   exposingTypes: List[Class[AnyRef]],
+                                                                   attributes: Map[String, Any] = Map.empty)
+  extends ExportDefinition[A] {
+
+  self =>
+
+  def exposing[B >: A](implicit manifest: ClassManifest[B]) =
+    OsgiExportDefinition(context, manifest.erasure.asInstanceOf[Class[AnyRef]] :: exposingTypes, attributes)
+
+  def attributes(attributes: Map[String, AnyRef]) =
+    OsgiExportDefinition(context, exposingTypes, self.attributes ++ attributes)
+
+  def apply[B <: A](service: B) = {
+    val clazzes = exposingTypes.map(_.getName).toArray
+    val registration = context.registerService(clazzes, service, attributes)
+    OsgiExport[A](self, registration, service)
+  }
+}
+
+case class OsgiExport[A <: AnyRef](definition: OsgiExportDefinition[A],
+                                   registration: ServiceRegistration,
+                                   instance: A)
+  extends Export[A] {
+
+  def release = registration.unregister
+
+  def attributes(attributes: Map[String, AnyRef]) {
+    registration.setProperties(attributes)
+  }
+
+  def update[B <: A](instance: B): Export[A] = {
+    release
+    definition.apply(instance)
+  }
+}
+
+trait ExportDefinition[A] {
+  // export the given service by using this export definition
+  def apply[B <: A](instance: B): Export[A]
+
+  def using[B <: A](instance: B) = apply(instance)
+
+  // add/replace attributes for exported services
+  def attributes(attributes: Map[String, AnyRef]): ExportDefinition[A]
+
+  // add a type to expose for the exported service
+  def exposing[B >: A](implicit manifest: ClassManifest[B]): ExportDefinition[A]
+}
+
+trait Export[A] {
+
+  // get the exported service instance.
+  def instance: A
+
+  // add/update attributes for exported service
+  def attributes(attributes: Map[String, AnyRef]): Unit
+
+  // update the exported service to a new instance.
+  def update[B <: A](instance: B): Export[A]
+
+  // releases this exported instance from the service registry
+  def release: Unit
 }

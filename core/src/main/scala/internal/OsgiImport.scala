@@ -1,13 +1,13 @@
 package com.weiglewilczek.scalamodules.internal
 
 import org.osgi.framework.{ServiceReference, BundleContext}
-import com.weiglewilczek.scalamodules.Import
+import com.weiglewilczek.scalamodules._
 
 /**
  * @author mathias
  * @since 22.04.11
  */
-abstract class OsgiImport[A](context: BundleContext, reference: ServiceReference) extends Import[A] {
+abstract class OsgiImport[A <: AnyRef](context: BundleContext, reference: ServiceReference) extends Import[A] {
 
   self =>
 
@@ -29,7 +29,5 @@ abstract class OsgiImport[A](context: BundleContext, reference: ServiceReference
 
   def attributes = reference.properties
 
-  def detached = getService.map {
-    service => new OsgiDetachedImport(service, context, reference)
-  }
+  def detached = getService.map(new OsgiDetachedImport(_, context, reference))
 }

@@ -1,15 +1,15 @@
 package com.weiglewilczek.scalamodules.internal
 
 import org.osgi.framework.{ServiceReference, BundleContext}
-import com.weiglewilczek.scalamodules.{Import, ServiceImport, Imports, Filter}
+import com.weiglewilczek.scalamodules._
 
 /**
  * @author mathias
  * @since 22.04.11
  */
-class OsgiServiceImports[A](context: BundleContext,
-                            clazz: Class[A],
-                            filter: Option[Filter]) extends Imports[A] {
+class OsgiServiceImports[A <: AnyRef](context: BundleContext,
+                                      clazz: Class[A],
+                                      filter: Option[Filter]) extends Imports[A] {
 
   def map[B](call: ServiceImport[A] => B): Iterable[B] = {
     serviceReferences.flatMap(callWithServiceImport(_, call).toIterable)
@@ -47,33 +47,6 @@ class OsgiServiceImports[A](context: BundleContext,
     Option(serviceReferences).map(_.toStream).getOrElse(Stream.empty)
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 import ImportDefinition._

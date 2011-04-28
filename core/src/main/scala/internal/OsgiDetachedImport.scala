@@ -1,15 +1,15 @@
 package com.weiglewilczek.scalamodules.internal
 
 import org.osgi.framework.{ServiceReference, BundleContext}
-import com.weiglewilczek.scalamodules.DetachedImport
+import com.weiglewilczek.scalamodules._
 
 /**
  * @author mathias
  * @since 22.04.11
  */
-class OsgiDetachedImport[A](service: A,
-                            context: BundleContext,
-                            reference: ServiceReference) extends DetachedImport[A] {
+class OsgiDetachedImport[A <: AnyRef](service: A,
+                                      context: BundleContext,
+                                      reference: ServiceReference) extends DetachedImport[A] {
   @volatile
   private[this] var disposed = false
 

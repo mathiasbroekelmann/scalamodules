@@ -8,5 +8,5 @@ import com.weiglewilczek.scalamodules.{Filter, ServiceRegistry}
  * @since 22.04.11
  */
 class OsgiServiceRegistry(context: BundleContext) extends ServiceRegistry {
-  def collect[A](clazz: Class[A], filter: Option[Filter]) = new OsgiServiceImports[A](context, clazz, filter)
+  def collect[A <: AnyRef](clazz: Class[A], filter: Option[Filter]) = new OsgiServiceImports[A](context, clazz, filter)
 }

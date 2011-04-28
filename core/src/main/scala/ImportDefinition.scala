@@ -4,7 +4,8 @@ package com.weiglewilczek.scalamodules
  * @author mathias
  * @since 22.04.11
  */
-case class ImportDefinition[A](clazz: Class[A], attributeFilter: Option[Filter] = None) {
+case class ImportDefinition[A <: AnyRef](clazz: Class[A],
+                                         attributeFilter: Option[Filter] = None) {
 
   self =>
 
@@ -30,6 +31,6 @@ case class ImportDefinition[A](clazz: Class[A], attributeFilter: Option[Filter] 
 }
 
 object ImportDefinition {
-  def ofType[A](implicit manifest: ClassManifest[A]): ImportDefinition[A] =
+  def ofType[A <: AnyRef](implicit manifest: ClassManifest[A]): ImportDefinition[A] =
     ImportDefinition(manifest.erasure.asInstanceOf[Class[A]])
 }

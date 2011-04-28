@@ -4,7 +4,7 @@ package com.weiglewilczek.scalamodules
  * @author mathias
  * @since 22.04.11
  */
-case class ImportsDefinition[A](clazz: Class[A], attributeFilter: Option[Filter] = None) {
+case class ImportsDefinition[A <: AnyRef](clazz: Class[A], attributeFilter: Option[Filter] = None) {
 
   self =>
 

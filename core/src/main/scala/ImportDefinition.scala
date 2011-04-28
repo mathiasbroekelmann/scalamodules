@@ -9,9 +9,11 @@ case class ImportDefinition[A <: AnyRef](clazz: Class[A],
 
   self =>
 
-  def apply(registry: ServiceRegistry): Import[A] = registry.collect(clazz, attributeFilter).head
+  def whichIs(filter: Filter) = ImportDefinition(clazz, Some(filter))
 
   def all: ImportsDefinition[A] = ImportsDefinition(clazz, attributeFilter)
+
+  def apply(registry: ServiceRegistry): Import[A] = registry.collect(clazz, attributeFilter).head
 
   def detached: DetachedImportDefinition[A] = new DetachedImportDefinition[A] {
     def apply(registry: ServiceRegistry) = registry.collect(clazz, attributeFilter).head.detached

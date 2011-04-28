@@ -33,7 +33,7 @@ object Test {
     tree <- ofType[Tree]
     apple <- ofType[Apple]
   } yield {
-    AppleTree(tree, apple)
+    new AppleTree(tree, apple)
   }
 
   val detachedAppleTreeByFor: ImportDependent[DetachedAppleTree with Disposable] = for {
@@ -60,11 +60,11 @@ object Test {
   }
 }
 
-trait Tree
 
-trait Apple
 
-case class AppleTree(tree: Import[Tree], apple: Import[Apple])
+
+
+class AppleTree(tree: Import[Tree], apple: Import[Apple])
 
 class DetachedAppleTree(tree: Tree, apple: Apple)
 

@@ -133,4 +133,6 @@ package object scalamodules {
       }
     } finally context ungetService serviceReference
   }
+
+  def ofType[A <: AnyRef](implicit manifest: ClassManifest[A]) = ImportDefinition.ofType(manifest)
 }
